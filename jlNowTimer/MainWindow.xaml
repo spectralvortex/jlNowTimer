@@ -1,0 +1,79 @@
+﻿<Window x:Class="jlNowTimer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:jlNowTimer"
+        mc:Ignorable="d"
+        Title="jl{NowTimer}" 
+        Height="221"
+        Width="215"
+        Topmost="True"
+        WindowStyle="None" 
+        Opacity="0.8" 
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="WidthAndHeight" 
+        Background="Transparent" 
+        Foreground="GhostWhite"
+        Initialized="Window_Initialized"
+        MouseWheel="Window_MouseWheel"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        MouseDoubleClick="Window_MouseDoubleClick"
+        MouseRightButtonDown="Window_MouseRightButtonDown">
+
+    <Grid x:Name="MainGrid"  Height="180" Width="180">
+
+        <Ellipse x:Name="BackgroundDisk" Width="90" Height="90" Canvas.Left="324.371" Canvas.Top="403.519" Stretch="Fill" StrokeThickness="2.66667" StrokeLineJoin="Round" Stroke="#FF000000">
+            <Ellipse.Fill>
+                <LinearGradientBrush StartPoint="0.504895,0.166663" EndPoint="0.504895,1.07843">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStop Color="#FF000000" Offset="0"/>
+                        <GradientStop Color="#FF696969" Offset="1"/>
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+
+
+        <local:TimeDisk x:Name="TimeDisk" CentreX="90" CentreY="90" RotationAngle="0" VisibleDegrees="0" Radius="86" Opacity="0.8"  
+                    Stretch="None" StrokeThickness="2.0" StrokeLineJoin="Round" Stroke="#FFFFEAD9">
+            <local:TimeDisk.Fill>
+                <LinearGradientBrush StartPoint="0.504895,0.166663" EndPoint="0.504895,1.07843">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStop Color="#fba900" Offset="0"/>
+                        <GradientStop Color="#FFA86802" Offset="1"/>
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </local:TimeDisk.Fill>
+        </local:TimeDisk>
+
+
+        <Ellipse x:Name="PowerLed" Height="8" Canvas.Left="324.371" Canvas.Top="403.519" Stretch="Fill" 
+                 StrokeThickness="1" StrokeLineJoin="Round" Stroke="#4699ff" Margin="86.45,0,85.4,54" 
+                 VerticalAlignment="Bottom" Visibility="Hidden">
+            <Ellipse.Fill>
+                <LinearGradientBrush StartPoint="0.504895,0.166663" EndPoint="0.504895,1.07843">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStop Color="#4699ff" Offset="0" />
+                        <GradientStop Color="#d9eaff" Offset="1" />
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+
+
+        <Label Name="lblTime"   
+               Margin="47.875,40.875,48.125,49.125" 
+               Opacity="0.9" 
+               SnapsToDevicePixels="False" 
+               Foreground="GhostWhite" 
+               FontSize="60" 
+               FontWeight="Normal" 
+               VerticalContentAlignment="Center" 
+               HorizontalContentAlignment="Center" ContentStringFormat="Numeric" Grid.IsSharedSizeScope="False" Content="1">
+        </Label>
+
+    </Grid>
+
+</Window>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jlNowTimer", "jlNowTimer\jlNowTimer.csproj", "{AC765FFF-87DE-41FE-B191-A58EBB0FE6AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC765FFF-87DE-41FE-B191-A58EBB0FE6AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC765FFF-87DE-41FE-B191-A58EBB0FE6AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC765FFF-87DE-41FE-B191-A58EBB0FE6AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC765FFF-87DE-41FE-B191-A58EBB0FE6AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1EF846F7-0938-4411-BCD7-4BC5F82037F7}
+	EndGlobalSection
+EndGlobal
