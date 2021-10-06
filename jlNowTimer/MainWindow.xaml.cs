@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -11,24 +12,24 @@ namespace jlNowTimer
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        const int TIMER_INTERVAL = 1;
         const int MAX_TIME = 60;
-        const int DEFAULT_START_TIME = 30;
 
         private System.Windows.Threading.DispatcherTimer _minuteTimer = new System.Windows.Threading.DispatcherTimer();
         private System.Windows.Threading.DispatcherTimer _seccondTimer = new System.Windows.Threading.DispatcherTimer();
+        private System.Windows.Threading.DispatcherTimer _milliSeccondTimer = new System.Windows.Threading.DispatcherTimer();
 
-
-        private double _currentTimeValue = 30;
-        private double _timeDiskStep;
+        private double _currentTimeValue = 30;      //Startup timer value.
+        private double _timeDiskStepPerMillisecond; //Amount of degrees the timer-disk should move per millisecond.
+        private double _timeDiskStepPerSecond;      //Amount of degrees the timer-disk will move per millisecond.
+        private double _correctedDiskSizeInDegrees; //Holds the correct size the disk should have grown to per second.
 
 
         public MainWindow()
         {
             InitializeComponent();
 
-            _timeDiskStep = 360 / _currentTimeValue;
+            #region Add envent handlers for the timer ticks.
+            // - - - - - - - - - - - - - - - - - - - - - - -
 
             _minuteTimer.Tick += _minuteTimer_Tick;
 
@@ -37,9 +38,21 @@ namespace jlNowTimer
                 //Every seccond:
                 //Alternate the visibility of the power led.
                 PowerLed.Visibility = (Visibility)Math.Abs((int)PowerLed.Visibility - 1);
-                //Move the timedisk one step.
-                TimeDisk.VisibleDegrees += _timeDiskStep;
+
+                //Correct the timedisk to next second-step.
+                _correctedDiskSizeInDegrees += _timeDiskStepPerSecond;
+                TimeDisk.VisibleDegrees = _correctedDiskSizeInDegrees;
             };
+
+            _milliSeccondTimer.Tick += (s, e) =>
+            {
+                //Move the timedisk one tiny step.
+                TimeDisk.VisibleDegrees += _timeDiskStepPerMillisecond;
+            };
+
+            // - - - - - - - - - - - - - - - - - - - - - - -
+            #endregion Add envent handlers for the timer ticks.
+
         }
 
 
@@ -55,8 +68,8 @@ namespace jlNowTimer
                 TimeDisk.VisibleDegrees += 360;
 
                 // Finnished -> Play fanfare! 🎺🎉
-                PlayTada();
-
+                Task.Run(() => PlayTada());
+                
 
                 //TODO:
                 // Her kan det legges inn forskjellig annet snax.
@@ -65,28 +78,27 @@ namespace jlNowTimer
             }
 
             lblTime.Content = _currentTimeValue.ToString();
-            //TimeDisk.VisibleDegrees += _timeDiskStep;
         }
 
 
         private void PlayTada()
         {
-            // Alarm
+            // Fanfare.
             string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             MediaPlayer player = new MediaPlayer();
             player.Open(new Uri(@"file://" + System.IO.Path.Combine(baseDirectory, Properties.Settings.Default.wavFileName), UriKind.RelativeOrAbsolute));
             player.Volume = 1f;
             player.Play();
-            //player.Close();
         }
 
 
         private void Window_Initialized(object sender, EventArgs e)
         {
-            _minuteTimer.Interval = TimeSpan.FromMinutes(TIMER_INTERVAL);
-            _seccondTimer.Interval = TimeSpan.FromSeconds(TIMER_INTERVAL);
+            _minuteTimer.Interval = TimeSpan.FromMinutes(1);
+            _seccondTimer.Interval = TimeSpan.FromSeconds(1);
+            _milliSeccondTimer.Interval = TimeSpan.FromMilliseconds(20);
 
-            lblTime.Content = DEFAULT_START_TIME.ToString();
+            lblTime.Content = _currentTimeValue.ToString();
         }
 
 
@@ -94,33 +106,29 @@ namespace jlNowTimer
         {
             _minuteTimer.Stop();
             _seccondTimer.Stop();
+            _milliSeccondTimer.Stop();
             TimeDisk.VisibleDegrees = 0;
+            _correctedDiskSizeInDegrees = 0;
             PowerLed.Visibility = Visibility.Hidden;
 
-            int currentTime = Int32.Parse(lblTime.Content.ToString());
-
+            _currentTimeValue = double.Parse(lblTime.Content.ToString());
+            
             if (e.Delta > 0) 
             {
-                if (currentTime < MAX_TIME) currentTime += 1;
-                lblTime.Content = currentTime.ToString();
-                _currentTimeValue = currentTime;
+                if (_currentTimeValue < MAX_TIME) _currentTimeValue += 1;
+                lblTime.Content = _currentTimeValue.ToString();
             }
             else 
             {
-                if (currentTime > 1) currentTime -= 1; // (!) there is now point in turning the timer down to 0 -> 1 is the lowest.
-                lblTime.Content = currentTime.ToString();
-                _currentTimeValue = currentTime;
+                if (_currentTimeValue > 1) _currentTimeValue -= 1; // (!) there is now point in turning the timer down to 0 -> 1 is the lowest.
+                lblTime.Content = _currentTimeValue.ToString();
             }
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // Make sure we can moove the time-disk window.
+            // Make sure we can moove the time-disk window around the screen by klikking and draging it.
             DragMove();
-
-            //TODO: Remove this -> only for debuging.
-            PlayTada();
-
         }
 
         private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -129,16 +137,28 @@ namespace jlNowTimer
             {
                 _minuteTimer.Stop();
                 _seccondTimer.Stop();
+                _milliSeccondTimer.Stop();
                 TimeDisk.VisibleDegrees = 0;
                 PowerLed.Visibility = Visibility.Hidden;
             }
             else
             {
+                // Note how big the increase in disk size must be per second, based on the start value for the timer.
+                _timeDiskStepPerSecond = 360 / (_currentTimeValue * 60);
+
+                // If the timer has reacht 0 (full turn) and it is started again in that position -> we need to set the start value to a positiv integer => 1
+                if (lblTime.Content.ToString() == "0") lblTime.Content = "1";
+
                 // Calculate how many steps the time disk must be divided up in when the disk ticks one step every second.:
-                // The disk is 360° -> divide it up in the amount of shoosen minutes times 60 seconds per minute.
-                _timeDiskStep = _currentTimeValue > 0 ? 360 / (_currentTimeValue * 60) : 0;
+                // The disk is 360° -> divide it up in the amount of choosen minutes times (60 seconds * (milisecond-tick-interval / 1000))  (timer ticks every 20 milliseconds).
+                // * 0.575 -> adjust the divider with 0.575 (makes bigger chunks of time disk to display per millisecondTimer tick) to compensate
+                // for lag when updating the grafics (it does not ceep track with the ticking of milliseconds).
+                // Note: it may be that this factor will vary from PC to PC -> due to the capasity of the PC --> if this turns out to be true => make a setting panel where
+                // the user may alter this factor to finetune the setting.
+                _timeDiskStepPerMillisecond = _currentTimeValue > 0 ? 360 / (_currentTimeValue * 3000 * 0.575) : 0; 
                 _minuteTimer.Start();
                 _seccondTimer.Start();
+                _milliSeccondTimer.Start();
             }
         }
 

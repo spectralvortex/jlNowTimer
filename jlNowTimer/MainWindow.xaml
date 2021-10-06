@@ -49,9 +49,9 @@
         </local:TimeDisk>
 
 
-        <Ellipse x:Name="PowerLed" Height="8" Canvas.Left="324.371" Canvas.Top="403.519" Stretch="Fill" 
-                 StrokeThickness="1" StrokeLineJoin="Round" Stroke="#4699ff" Margin="86.45,0,85.4,54" 
-                 VerticalAlignment="Bottom" Visibility="Hidden">
+        <Ellipse x:Name="PowerLed" Height="7.8" Canvas.Left="324.371" Canvas.Top="403.519" Stretch="Fill" 
+                 StrokeThickness="1" StrokeLineJoin="Round" Stroke="#4699ff" Margin="86,120,86,0" 
+                 VerticalAlignment="Top" Visibility="Hidden">
             <Ellipse.Fill>
                 <LinearGradientBrush StartPoint="0.504895,0.166663" EndPoint="0.504895,1.07843">
                     <LinearGradientBrush.GradientStops>
@@ -64,7 +64,7 @@
 
 
         <Label Name="lblTime"   
-               Margin="47.875,40.875,48.125,49.125" 
+               Margin="46,38,46,46" 
                Opacity="0.9" 
                SnapsToDevicePixels="False" 
                Foreground="GhostWhite" 
@@ -73,6 +73,11 @@
                VerticalContentAlignment="Center" 
                HorizontalContentAlignment="Center" ContentStringFormat="Numeric" Grid.IsSharedSizeScope="False" Content="1">
         </Label>
+        <!-- Red cross -->  
+        <Rectangle Visibility="Hidden" HorizontalAlignment="Center" Height="1" Margin="0,0,0,0" Stroke="Red" VerticalAlignment="Center" Width="150"/>
+        <Rectangle Visibility="Hidden" HorizontalAlignment="Center" Height="150" Margin="0,0,0,0" Stroke="Red" VerticalAlignment="Center" Width="1"/>
+
+
 
     </Grid>
 
