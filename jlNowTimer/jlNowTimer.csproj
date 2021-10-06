@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Fanfares\**" />
+    <EmbeddedResource Remove="Fanfares\**" />
+    <None Remove="Fanfares\**" />
+    <Page Remove="Fanfares\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -29,10 +36,6 @@
     <None Update="tada.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Fanfares\" />
   </ItemGroup>
 
 </Project>
