@@ -28,7 +28,7 @@ namespace jlNowTimer
         {
             InitializeComponent();
 
-            _timeDiskStep = 360 / (double)_currentTimeValue;
+            _timeDiskStep = 360 / _currentTimeValue;
 
             _minuteTimer.Tick += _minuteTimer_Tick;
 
@@ -40,7 +40,6 @@ namespace jlNowTimer
                 //Move the timedisk one step.
                 TimeDisk.VisibleDegrees += _timeDiskStep;
             };
-
         }
 
 
@@ -55,7 +54,7 @@ namespace jlNowTimer
                 PowerLed.Visibility = Visibility.Hidden;
                 TimeDisk.VisibleDegrees += 360;
 
-
+                // Finnished -> Play fanfare! 🎺🎉
                 PlayTada();
 
 
@@ -119,6 +118,7 @@ namespace jlNowTimer
             // Make sure we can moove the time-disk window.
             DragMove();
 
+            //TODO: Remove this -> only for debuging.
             PlayTada();
 
         }
