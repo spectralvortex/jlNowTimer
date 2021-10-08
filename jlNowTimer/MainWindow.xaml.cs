@@ -110,9 +110,12 @@ namespace jlNowTimer
             TimeDisk.VisibleDegrees = 0;
             _correctedDiskSizeInDegrees = 0;
             PowerLed.Visibility = Visibility.Hidden;
-
+                       
             _currentTimeValue = double.Parse(lblTime.Content.ToString());
-            
+            // Resets to lowest possible start time if _currentTimeValue had reached 0.
+            // There is now point in turning the timer down to 0 -> 1 is the lowest.
+            if (_currentTimeValue == 0) _currentTimeValue = 1;
+
             if (e.Delta > 0) 
             {
                 if (_currentTimeValue < MAX_TIME) _currentTimeValue += 1;

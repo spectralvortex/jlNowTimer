@@ -41,7 +41,7 @@ namespace jlNowTimer
             set
             {
                 // Dersom vi havner på 360 eller mer, så bikker vi over startpunktet og begynner
-                // på ny runde. Da "nuller den ferdige runde seg ut". Det kan kanskje være greit
+                // på ny runde. Da "nuller den ferdige runden seg ut". Det kan kanskje være greit
                 // i noen tilfeller, men ikke her. Derfor sørger vi for at om vi havner på 360 eller
                 // mer, så forblir vi på full disk.
                 if (value >= 360) value = 359.9999;
@@ -62,7 +62,7 @@ namespace jlNowTimer
 
         // " Overrides "
 
-        protected override System.Windows.Media.Geometry DefiningGeometry
+        protected override Geometry DefiningGeometry
         {
             get
             {
@@ -103,10 +103,16 @@ namespace jlNowTimer
 
         private Point CartesianCoordinatePoint(double angle, double radius)
         {
-            double angleRad = (Math.PI / 180.0) * (angle - 90);
+            // Convert the angel from degrees to radians.
+            // We tilt the coordination system by 90º so that the arc starts drawing from the top => (angle in degrees - 90º).
+            double angleRad = (Math.PI / 180.0) * (angle - 90); //https://www.khanacademy.org/math/algebra2/x2ec2f6f830c9fb89:trig/x2ec2f6f830c9fb89:radians/v/we-converting-radians-to-degrees
+
+            // Calulate the x & y coordinates
             double x = radius * Math.Cos(angleRad);
             double y = radius * Math.Sin(angleRad);
+
             return new Point(x, y);
+
         } // CartesianCoordinatePoint
 
     }
