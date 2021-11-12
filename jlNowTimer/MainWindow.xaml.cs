@@ -113,7 +113,7 @@ namespace jlNowTimer
                        
             _currentTimeValue = double.Parse(lblTime.Content.ToString());
             // Resets to lowest possible start time if _currentTimeValue had reached 0.
-            // There is now point in turning the timer down to 0 -> 1 is the lowest.
+            // There is no point in turning the timer down to 0 -> 1 is the lowest.
             if (_currentTimeValue == 0) _currentTimeValue = 1;
 
             if (e.Delta > 0) 
@@ -123,14 +123,14 @@ namespace jlNowTimer
             }
             else 
             {
-                if (_currentTimeValue > 1) _currentTimeValue -= 1; // (!) there is now point in turning the timer down to 0 -> 1 is the lowest.
+                if (_currentTimeValue > 1) _currentTimeValue -= 1; // (!) there is no point in turning the timer down to 0 -> 1 is the lowest.
                 lblTime.Content = _currentTimeValue.ToString();
             }
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // Make sure we can moove the time-disk window around the screen by klikking and draging it.
+            // Make sure we can move the time-disk window around the screen by klikking and draging it.
             DragMove();
         }
 
